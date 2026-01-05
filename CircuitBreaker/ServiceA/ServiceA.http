@@ -1,0 +1,20 @@
+@ServiceA_HostAddress = http://localhost:5207
+
+GET {{ServiceA_HostAddress}}/status
+Accept: application/json
+
+GET {{ServiceA_HostAddress}}/status
+
+###
+
+GET {{ServiceA_HostAddress}}/break
+
+###
+
+GET {{ServiceA_HostAddress}}/restore
+
+###
+
+GET {{ServiceA_HostAddress}}/process/{id}
+
+###

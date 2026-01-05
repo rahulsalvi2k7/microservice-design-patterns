@@ -1,0 +1,6 @@
+@ServiceB_HostAddress = http://localhost:5155
+
+GET {{ServiceB_HostAddress}}/process/2
+Accept: application/json
+
+###

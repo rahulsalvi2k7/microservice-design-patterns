@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CircuitBreaker", "CircuitBreaker", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceA", "CircuitBreaker\ServiceA\ServiceA.csproj", "{37831AAC-068C-46BE-98C3-E2C1785F335E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceB", "CircuitBreaker\ServiceB\ServiceB.csproj", "{E53B6DED-2FE3-4E84-A611-B48D01CF100D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37831AAC-068C-46BE-98C3-E2C1785F335E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37831AAC-068C-46BE-98C3-E2C1785F335E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37831AAC-068C-46BE-98C3-E2C1785F335E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37831AAC-068C-46BE-98C3-E2C1785F335E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E53B6DED-2FE3-4E84-A611-B48D01CF100D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53B6DED-2FE3-4E84-A611-B48D01CF100D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53B6DED-2FE3-4E84-A611-B48D01CF100D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53B6DED-2FE3-4E84-A611-B48D01CF100D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37831AAC-068C-46BE-98C3-E2C1785F335E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E53B6DED-2FE3-4E84-A611-B48D01CF100D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1282EA9-7AC8-4921-AA28-3F4DBCC5E559}
+	EndGlobalSection
+EndGlobal

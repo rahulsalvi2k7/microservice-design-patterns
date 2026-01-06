@@ -1,2 +1,9 @@
-# microservice-design-patterns
-microservice-design-patterns
+## Microservice Design Patterns
+
+This repository contains sample implementation of various design patterns in Microservice Architecture.
+
+# We have implemented below patterns so far
+
+- Circuit Breaker
+- Side Car
+

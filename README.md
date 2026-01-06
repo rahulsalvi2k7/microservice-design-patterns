@@ -4,6 +4,7 @@ This repository contains sample implementation of various design patterns in Mic
 
 # We have implemented below patterns so far
 
+- Aggregator
 - Circuit Breaker
 - Side Car
 

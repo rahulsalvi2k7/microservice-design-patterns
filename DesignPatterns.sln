@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceRegistry.Lib", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "ServiceDiscovery\PaymentService\PaymentService.csproj", "{CBC9ADF8-183E-422C-81FC-2CBC92EC0439}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "saga-orchestration", "saga-orchestration", "{9E73820E-537A-43C3-BE23-E85458E10C97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orchestratorService", "saga-orchestration\orchestratorService\orchestratorService.csproj", "{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,10 @@ Global
 		{CBC9ADF8-183E-422C-81FC-2CBC92EC0439}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBC9ADF8-183E-422C-81FC-2CBC92EC0439}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBC9ADF8-183E-422C-81FC-2CBC92EC0439}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +135,7 @@ Global
 		{2F29EC74-CECE-4B55-8E84-9BAD698715C6} = {34FF39A4-DFF1-4E26-8F8C-E445349C6C76}
 		{C1EA483B-477E-4220-8328-DC76B6C9F91C} = {34FF39A4-DFF1-4E26-8F8C-E445349C6C76}
 		{CBC9ADF8-183E-422C-81FC-2CBC92EC0439} = {34FF39A4-DFF1-4E26-8F8C-E445349C6C76}
+		{B6B25C04-F38B-4EDD-BE2B-258A8CB63319} = {9E73820E-537A-43C3-BE23-E85458E10C97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1282EA9-7AC8-4921-AA28-3F4DBCC5E559}

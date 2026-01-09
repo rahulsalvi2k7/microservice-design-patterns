@@ -9,5 +9,7 @@ namespace ServiceRegistry.Lib
         Task Unregister(string name);
 
         Task<string> GetLocation(string name);
+
+        Task SendHeartbeat(string name);
     }
 }

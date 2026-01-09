@@ -49,5 +49,12 @@ namespace ServiceRegistry.Lib
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task SendHeartbeat(string name)
+        {
+            var response = await _httpClient.GetAsync($"/heartbeat/{name}");
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

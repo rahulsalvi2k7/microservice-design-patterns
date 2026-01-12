@@ -1,32 +1,54 @@
+using Microsoft.AspNetCore.Mvc;
+using orchestratorService.lib;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient();    
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.IncludeFields = true;
+});
+builder.Services.AddSingleton<IOrchestratorClient, OrchestratorClient>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var orchestratorClient = app.Services.GetRequiredService<IOrchestratorClient>();
 
-app.MapGet("/weatherforecast", () =>
+lifetime.ApplicationStarted.Register(async () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    await orchestratorClient.Subscribe("payment-completed", "orderService");
+    await orchestratorClient.Subscribe("payment-failed", "orderService");
 });
 
-app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+lifetime.ApplicationStopped.Register(async () =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    await orchestratorClient.Unsubscribe("payment-completed", "orderService");
+    await orchestratorClient.Unsubscribe("payment-failed", "orderService");
+});
+
+
+// Configure the HTTP request pipeline.
+
+app.MapGet("/place/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+{
+    Console.WriteLine($"order placed {id}");
+
+    await orchestratorClient.Publish("order-placed");
+
+    return Results.Accepted();
+});
+
+app.MapGet("/cancel/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+{
+    Console.WriteLine($"order cancelled {id}");
+
+    await orchestratorClient.Publish("order-cancelled");
+
+    return Results.Accepted();
+});
+
+await app.RunAsync();

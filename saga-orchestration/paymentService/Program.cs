@@ -1,32 +1,51 @@
+using Microsoft.AspNetCore.Mvc;
+using orchestratorService.lib;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.IncludeFields = true;
+});
+builder.Services.AddSingleton<IOrchestratorClient, OrchestratorClient>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var orchestratorClient = app.Services.GetRequiredService<IOrchestratorClient>();
 
-app.MapGet("/weatherforecast", () =>
+lifetime.ApplicationStarted.Register(async () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    await orchestratorClient.Subscribe("order-placed", "paymentService");
+    await orchestratorClient.Subscribe("order-cancelled", "paymentService");
 });
 
-app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+lifetime.ApplicationStopped.Register(async () =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    await orchestratorClient.Unsubscribe("order-placed", "paymentService");
+    await orchestratorClient.Unsubscribe("order-cancelled", "paymentService");
+});
+
+app.MapGet("/complete/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+{
+    Console.WriteLine($"payment completed {id}");
+
+    await orchestratorClient.Publish("payment-completed");
+
+    return Results.Accepted();
+});
+
+app.MapGet("/fail/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+{
+    Console.WriteLine($"payment failed {id}");
+
+    await orchestratorClient.Publish("payment-failed");
+
+    return Results.Accepted();
+});
+
+await app.RunAsync();

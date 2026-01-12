@@ -1,31 +1,29 @@
-// Configure the HTTP request pipeline.
-
-
-
-
-public class Subscriptions 
+namespace orchestratorService
 {
-    public readonly List<Subscription> subscriptions = new List<Subscription>();
-
-    public void Subscribe(string eventName, string serviceName)
+    public class Subscriptions
     {
-        subscriptions.Add(new Subscription()
-        {
-            Id = Guid.NewGuid(),
-            EventName = eventName,
-            ServiceName = serviceName
-        });
-    }
+        public readonly List<Subscription> subscriptions = new List<Subscription>();
 
-    public void Unsubscribe(string eventName, string serviceName)
-    {
-        var subscription = subscriptions.Find(s => s.EventName == eventName && s.ServiceName == serviceName);
-
-        if (subscription is null)
+        public void Subscribe(string eventName, string serviceName)
         {
-            return ;
+            subscriptions.Add(new Subscription()
+            {
+                Id = Guid.NewGuid(),
+                EventName = eventName,
+                ServiceName = serviceName
+            });
         }
 
-        subscriptions.Remove(subscription);
+        public void Unsubscribe(string eventName, string serviceName)
+        {
+            var subscription = subscriptions.Find(s => s.EventName == eventName && s.ServiceName == serviceName);
+
+            if (subscription is null)
+            {
+                return;
+            }
+
+            subscriptions.Remove(subscription);
+        }
     }
 }

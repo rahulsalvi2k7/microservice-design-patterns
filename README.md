@@ -9,3 +9,4 @@ This repository contains sample implementation of various design patterns in Mic
 - Saga Orchestration
 - Service Discovery
 - Side Car
+- Transactional Outbox

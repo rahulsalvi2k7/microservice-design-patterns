@@ -57,6 +57,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "Transaction
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "TransactionalOutbox\NotificationService\NotificationService.csproj", "{D3379406-4DA6-422E-9D83-133339B4BB1A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RateLimiter", "RateLimiter", "{19BD86A0-F6CF-44EE-B023-53271EE5B726}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateLimiterService", "RateLimiter\RateLimiterService\RateLimiterService.csproj", "{FD8D600E-8FCE-4A28-AA37-10BC5060C585}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +151,10 @@ Global
 		{D3379406-4DA6-422E-9D83-133339B4BB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3379406-4DA6-422E-9D83-133339B4BB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3379406-4DA6-422E-9D83-133339B4BB1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8D600E-8FCE-4A28-AA37-10BC5060C585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8D600E-8FCE-4A28-AA37-10BC5060C585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8D600E-8FCE-4A28-AA37-10BC5060C585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8D600E-8FCE-4A28-AA37-10BC5060C585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +181,7 @@ Global
 		{17B60DC7-E8BE-4DCF-BAF7-57751251F08F} = {9E73820E-537A-43C3-BE23-E85458E10C97}
 		{9D211FC0-4AFE-4C95-B11B-CD93A0157289} = {F07C448B-5963-44A9-8848-7DBA06763145}
 		{D3379406-4DA6-422E-9D83-133339B4BB1A} = {F07C448B-5963-44A9-8848-7DBA06763145}
+		{FD8D600E-8FCE-4A28-AA37-10BC5060C585} = {19BD86A0-F6CF-44EE-B023-53271EE5B726}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1282EA9-7AC8-4921-AA28-3F4DBCC5E559}

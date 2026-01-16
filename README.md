@@ -6,6 +6,7 @@ This repository contains sample implementation of various design patterns in Mic
 
 - Aggregator
 - Circuit Breaker
+- Distributed Tracing
 - Rate Limiter
 - Saga Orchestration
 - Service Discovery

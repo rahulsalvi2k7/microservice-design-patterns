@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceA", "Sidecar\Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceB", "Sidecar\ServiceB\ServiceB.csproj", "{4435A4C8-4E21-4AA9-AABD-715BBA7321D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerSidecarService", "Sidecar\LoggerSidecarService\LoggerSidecarService.csproj", "{25F4F846-4B1C-4F81-A0FE-D7DF08A08042}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentralLoggingService", "Sidecar\CentralLoggingService\CentralLoggingService.csproj", "{25F4F846-4B1C-4F81-A0FE-D7DF08A08042}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerSidecar.Lib", "Sidecar\LoggerSidecar.Lib\LoggerSidecar.Lib.csproj", "{7B93174E-6F13-414B-B110-47EEF91AF4CD}"
 EndProject

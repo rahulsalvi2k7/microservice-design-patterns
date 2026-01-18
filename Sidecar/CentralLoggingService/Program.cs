@@ -17,26 +17,13 @@ var fileName = $"{DateTime.UtcNow.ToString("yyyy-MM-dd")}.log";
 
 // Configure the HTTP request pipeline.
 
-app.MapPost("/info", async (HttpRequest httpRequest) =>
+app.MapPost("/log", async (HttpRequest httpRequest) =>
 {
     using var reader = new StreamReader(httpRequest.Body, Encoding.UTF8);
 
     var rawBody = await reader.ReadToEndAsync();
-
-    var message = $"{DateTime.UtcNow:s} : {rawBody}{Environment.NewLine}";
-
-    await File.AppendAllTextAsync(fileName, message);
-});
-
-app.MapPost("/error", async (HttpRequest httpRequest) =>
-{
-    using var reader = new StreamReader(httpRequest.Body, Encoding.UTF8);
-
-    var rawBody = await reader.ReadToEndAsync();
-
-    var message = $"{DateTime.UtcNow:s} : *** ERROR*** : {rawBody}{Environment.NewLine}";
-
-    await File.AppendAllTextAsync(fileName, message);
+     
+    await File.AppendAllTextAsync(fileName, rawBody + Environment.NewLine);
 });
 
 await app.RunAsync();

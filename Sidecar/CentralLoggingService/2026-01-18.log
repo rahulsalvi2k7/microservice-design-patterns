@@ -1,0 +1,2 @@
+{"DateTime":"2026-01-18T11:13:01.553145Z","LogLevel":0,"ServiceName":"serviceA","Message":"Hello from serviceA"}
+{"DateTime":"2026-01-18T11:13:04.1886396Z","LogLevel":2,"ServiceName":"serviceB","Message":"Error from serviceB"}

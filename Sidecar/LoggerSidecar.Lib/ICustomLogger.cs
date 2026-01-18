@@ -2,8 +2,8 @@
 {
     public interface ICustomLogger
     {
-        Task Info(string message);
+        Task Info(string serviceName, string message);
 
-        Task Error(string message);
+        Task Error(string serviceName, string message);
     }
 }

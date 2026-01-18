@@ -1,26 +1,38 @@
-﻿using System.Net.Http;
-
-namespace LoggerSidecar.Lib
+﻿namespace LoggerSidecar.Lib
 {
     public class CustomLogger : ICustomLogger
     {
-        private readonly HttpClient httpClient;
+        private readonly LogMessageStore logMessageStore;
 
-        public CustomLogger(IHttpClientFactory httpClientFactory)
+        public CustomLogger(LogMessageStore logMessageStore)
         {
-            httpClient = httpClientFactory.CreateClient();
-
-            httpClient.BaseAddress = new Uri("http://localhost:5006");
+            this.logMessageStore = logMessageStore;
         }
 
-        public async Task Error(string message)
+        public Task Error(string serviceName, string message)
         {
-            await httpClient.PostAsync("/error", new StringContent(message));
+            logMessageStore.LogMessages.Enqueue(new LogMessage()
+            {
+                Message = message,
+                DateTime = DateTime.UtcNow,
+                LogLevel = LogLevel.Error,
+                ServiceName = serviceName
+            });
+
+            return Task.CompletedTask;
         }
 
-        public async Task Info(string message)
+        public Task Info(string serviceName, string message)
         {
-            await httpClient.PostAsync("/info", new StringContent(message));
+            logMessageStore.LogMessages.Enqueue(new LogMessage()
+            {
+                Message = message,
+                DateTime = DateTime.UtcNow,
+                LogLevel = LogLevel.Info,
+                ServiceName = serviceName
+            });
+
+            return Task.CompletedTask;
         }
     }
 }

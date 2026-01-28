@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using ServiceRegistry.Lib.Interfaces;
 
-namespace ServiceRegistry.Lib
+namespace ServiceRegistry.Lib.BackgroundServices
 {
     public class HeartbeatService : BackgroundService
     {
@@ -10,8 +11,8 @@ namespace ServiceRegistry.Lib
 
         public HeartbeatService(IServiceClient serviceClient, IConfiguration configuration)
         {
-            this._serviceClient = serviceClient;
-            this._configuration = configuration;
+            _serviceClient = serviceClient;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

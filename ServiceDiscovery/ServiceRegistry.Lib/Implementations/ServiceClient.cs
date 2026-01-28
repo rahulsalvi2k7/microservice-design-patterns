@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using ServiceRegistry.Lib.Interfaces;
 using System.Net.Http.Json;
 
-namespace ServiceRegistry.Lib
+namespace ServiceRegistry.Lib.Implementations
 {
     public class ServiceClient : IServiceClient
     {
@@ -13,7 +14,7 @@ namespace ServiceRegistry.Lib
             _httpClient = httpClientFactory.CreateClient();
 
             _httpClient.BaseAddress = new Uri("http://localhost:5015");
-            this._configuration = configuration;
+            _configuration = configuration;
         }
 
         public async Task<string> GetLocation(string name)
@@ -31,8 +32,8 @@ namespace ServiceRegistry.Lib
         {
             var serviceRegistrationRequest = new
             {
-                name = name,
-                location = location
+                name,
+                location
             };
 
             var response = await _httpClient.PostAsync($"/register", JsonContent.Create(serviceRegistrationRequest));

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ServiceRegistry.Lib.Interfaces;
 
-namespace ServiceRegistry.Lib
+namespace ServiceRegistry.Lib.Extensions
 {
     public static class HostApplicationLifetimeExtensions
     {

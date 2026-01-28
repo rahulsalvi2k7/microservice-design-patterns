@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ServiceRegistry.Lib;
+using ServiceRegistry.Lib.Interfaces;
 
 namespace OrderService
 {

@@ -1,4 +1,4 @@
-﻿namespace ServiceRegistry.Lib
+﻿namespace ServiceRegistry.Lib.Interfaces
 {
     public interface IServiceInfoResolver
     {

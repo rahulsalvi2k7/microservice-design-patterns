@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using ServiceRegistry.Lib.Interfaces;
 
-namespace ServiceRegistry.Lib
+namespace ServiceRegistry.Lib.Implementations
 {
     public class ServiceInfoResolver : IServiceInfoResolver
     {

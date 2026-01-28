@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ServiceRegistry.Lib;
+using ServiceRegistry.Lib.BackgroundServices;
+using ServiceRegistry.Lib.Extensions;
+using ServiceRegistry.Lib.Implementations;
+using ServiceRegistry.Lib.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

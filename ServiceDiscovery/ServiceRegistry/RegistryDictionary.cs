@@ -1,19 +1,22 @@
-public class RegistryDictionary
+namespace ServiceRegistry
 {
-    private readonly Dictionary<string, string> _registry = [];
-
-    public void Register(ServiceRegistrationRequest serviceRegistrationRequest)
+    public class RegistryDictionary
     {
-        _registry[serviceRegistrationRequest.Name] = serviceRegistrationRequest.Location;
-    }
+        private readonly Dictionary<string, string> _registry = [];
 
-    public void Unregister(string key)
-    {
-        _registry.Remove(key);
-    }
+        public void Register(ServiceRegistrationRequest serviceRegistrationRequest)
+        {
+            _registry[serviceRegistrationRequest.Name] = serviceRegistrationRequest.Location;
+        }
 
-    public string Get(string key)
-    {
-        return _registry[key];
+        public void Unregister(string key)
+        {
+            _registry.Remove(key);
+        }
+
+        public string Get(string key)
+        {
+            return _registry[key];
+        }
     }
 }

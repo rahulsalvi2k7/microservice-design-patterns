@@ -1,16 +1,19 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
 
 namespace ServiceRegistry.Lib
 {
     public class ServiceClient : IServiceClient
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public ServiceClient(IHttpClientFactory httpClientFactory)
+        public ServiceClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClient = httpClientFactory.CreateClient();
 
             _httpClient.BaseAddress = new Uri("http://localhost:5015");
+            this._configuration = configuration;
         }
 
         public async Task<string> GetLocation(string name)
@@ -50,9 +53,11 @@ namespace ServiceRegistry.Lib
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task SendHeartbeat(string name)
+        public async Task SendHeartbeat()
         {
-            var response = await _httpClient.GetAsync($"/heartbeat/{name}");
+            var serviceName = _configuration["ServiceDiscovery:serviceName"] ?? string.Empty;
+
+            var response = await _httpClient.GetAsync($"/heartbeat/{serviceName}");
 
             response.EnsureSuccessStatusCode();
         }

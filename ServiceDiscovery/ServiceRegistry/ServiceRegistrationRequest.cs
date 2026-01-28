@@ -1,6 +1,9 @@
-public sealed record ServiceRegistrationRequest 
+namespace ServiceRegistry
 {
-    public string Name { get; set; }
+    public sealed record ServiceRegistrationRequest
+    {
+        public string Name { get; set; }
 
-    public string Location { get; set; }
+        public string Location { get; set; }
+    }
 }

@@ -1,8 +1,6 @@
-﻿using System.Net.Http;
-
-namespace ServiceRegistry.Lib
+﻿namespace ServiceRegistry.Lib
 {
-    public interface IServiceClient 
+    public interface IServiceClient
     {
         Task Register(string name, string location);
 
@@ -10,6 +8,6 @@ namespace ServiceRegistry.Lib
 
         Task<string> GetLocation(string name);
 
-        Task SendHeartbeat(string name);
+        Task SendHeartbeat();
     }
 }

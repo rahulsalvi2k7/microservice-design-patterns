@@ -11,10 +11,11 @@ namespace ServiceRegistry.Lib.Implementations
 
         public ServiceClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _httpClient = httpClientFactory.CreateClient();
-
-            _httpClient.BaseAddress = new Uri("http://localhost:5015");
             _configuration = configuration;
+
+            var serviceRegistryLocation = _configuration["ServiceDiscovery:serviceRegistryLocation"] ?? throw new InvalidOperationException();
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri(serviceRegistryLocation);
         }
 
         public async Task<string> GetLocation(string name)

@@ -18,7 +18,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ServiceStatusReaderMiddleware>();
 
-app.MapGet("/process/{id}", async ([FromRoute] string id) =>
+app.MapGet("/process/{id}", ([FromRoute] string id) =>
 {
     Console.WriteLine($"process {id}");
 

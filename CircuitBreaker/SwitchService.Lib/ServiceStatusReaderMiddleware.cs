@@ -1,22 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Net;
-
-namespace SwitchService.Lib
+﻿namespace SwitchService.Lib
 {
-    public class ServiceStatusReaderMiddleware
-    {
-        private readonly RequestDelegate _next;
+    using Microsoft.AspNetCore.Http;
+    using System.Net;
 
-        public ServiceStatusReaderMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+    public class ServiceStatusReaderMiddleware(RequestDelegate next)
+    {
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context, IServiceStatusReader serviceStatusReader)
         {
             var serviceStatus = await serviceStatusReader.ReadServiceStatusAsync();
 
-            if (serviceStatus.Id == 0)
+            if (serviceStatus.Code == ServiceStatusCode.Open)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
                 return;

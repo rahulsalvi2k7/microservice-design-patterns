@@ -1,15 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace SwitchService.Lib
 {
     public class ServiceStatusReader : IServiceStatusReader
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public ServiceStatusReader(IHttpClientFactory httpclientFactory)
+        public ServiceStatusReader(IHttpClientFactory httpclientFactory, IConfiguration configuration)
         {
+            _configuration = configuration;
+
+            var baseUrl = _configuration["circuitBreaker:baseUrl"] ?? throw new ApplicationException("missing config");
+
             _httpClient = httpclientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:5207");
+            _httpClient.BaseAddress = new Uri(baseUrl);            
         }
 
         public async Task<ServiceStatus> ReadServiceStatusAsync()
@@ -22,7 +28,7 @@ namespace SwitchService.Lib
 
             var serviceStatus = JsonConvert.DeserializeObject<ServiceStatus>(responseString);
 
-            return serviceStatus;
+            return serviceStatus ?? ServiceStatus.Default;
         }
     }
 }

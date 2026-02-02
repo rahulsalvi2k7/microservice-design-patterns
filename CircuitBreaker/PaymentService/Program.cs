@@ -19,7 +19,7 @@ app.UseMiddleware<ServiceStatusReaderMiddleware>();
 
 // Configure the HTTP request pipeline.
 
-app.MapGet("/pay/{id}", async ([FromRoute] string id) =>
+app.MapGet("/pay/{id}", ([FromRoute] string id) =>
 {
     Console.WriteLine($"pay {id}");
 

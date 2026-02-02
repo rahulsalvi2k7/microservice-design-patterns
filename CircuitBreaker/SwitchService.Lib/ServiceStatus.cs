@@ -2,20 +2,11 @@
 {
     public sealed class ServiceStatus
     {
-        public int Id { get; set; }
+        public ServiceStatusCode Code { get; set; }
 
-        public string? Name { get; set; }
-
-        public static ServiceStatus Default
+        public static ServiceStatus Default = new()
         {
-            get
-            {
-                return new ServiceStatus
-                {
-                    Id = 0,
-                    Name = "Working"
-                };
-            }
-        }
+            Code = ServiceStatusCode.Open
+        };        
     }
 }

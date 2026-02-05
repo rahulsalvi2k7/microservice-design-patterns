@@ -1,14 +1,22 @@
-﻿namespace orchestratorService.lib
+﻿using Microsoft.Extensions.Configuration;
+using orchestratorService.lib.Interfaces;
+
+namespace orchestratorService.lib.Implementation
 {
     public class OrchestratorClient : IOrchestratorClient
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public OrchestratorClient(IHttpClientFactory httpClientFactory)
+        public OrchestratorClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
+            _configuration = configuration;
+
+            var orchestratorBaseAddress = _configuration["orchestration:baseAddress"] ?? throw new InvalidOperationException();
+
             _httpClient = httpClientFactory.CreateClient();
 
-            _httpClient.BaseAddress = new Uri("http://localhost:5072");
+            _httpClient.BaseAddress = new Uri(orchestratorBaseAddress);
         }
 
         public async Task Publish(string eventName)

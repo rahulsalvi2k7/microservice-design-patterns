@@ -4,14 +4,29 @@ namespace orchestratorService
 {
     public static class SubscriptionRoutes
     {
-        public static void RegisterSubscriptionRoutes(this IEndpointRouteBuilder endpointRouteBuilder)
+        public static IEndpointRouteBuilder RegisterSubscriptionRoutes(this IEndpointRouteBuilder app)
         {
-            endpointRouteBuilder.MapGet("/subscriptions", ([FromServices] Subscriptions subscriptions) =>
+            app.AddSubscriptionsRoute()
+                .AddSubscribeRoute()
+                .AddUnsubscribeRoute()
+                .AddPublishRoute();
+
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddSubscriptionsRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/subscriptions", ([FromServices] Subscriptions subscriptions) =>
             {
                 return Results.Ok(subscriptions.subscriptions);
             });
 
-            endpointRouteBuilder.MapGet("/subscribe/{eventName}/{serviceName}", (
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddSubscribeRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/subscribe/{eventName}/{serviceName}", (
                 [FromServices] Subscriptions subscriptions,
                 [FromRoute] string eventName,
                 [FromRoute] string serviceName) =>
@@ -23,7 +38,12 @@ namespace orchestratorService
                 return Results.Accepted();
             });
 
-            endpointRouteBuilder.MapGet("/unsubscribe/{eventName}/{serviceName}", (
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddUnsubscribeRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/unsubscribe/{eventName}/{serviceName}", (
                 [FromServices] Subscriptions subscriptions,
                 [FromRoute] string eventName,
                 [FromRoute] string serviceName) =>
@@ -35,24 +55,28 @@ namespace orchestratorService
                 return Results.Accepted();
             });
 
-            endpointRouteBuilder.MapGet("/publish/{eventName}", (
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddPublishRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/publish/{eventName}", (
                 [FromServices] Subscriptions subscriptions,
-                [FromRoute] string eventName
-                ) =>
+                [FromRoute] string eventName) =>
             {
                 var subscriptionsForEvent = subscriptions
                     .subscriptions
                     .Where(s => s.EventName == eventName);
 
-                // todo : fan-out and send to all subscribers in parallel 
-
-                foreach (var subscription in subscriptionsForEvent)
+                Parallel.ForEach(subscriptionsForEvent, (subscription) =>
                 {
                     Console.WriteLine($"{subscription.EventName} sent to {subscription.ServiceName}");
-                }
+                });
 
                 return Results.Ok();
             });
+
+            return app;
         }
     }
 }

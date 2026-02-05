@@ -41,15 +41,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceRegistry.Lib", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "ServiceDiscovery\PaymentService\PaymentService.csproj", "{CBC9ADF8-183E-422C-81FC-2CBC92EC0439}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "saga-orchestration", "saga-orchestration", "{9E73820E-537A-43C3-BE23-E85458E10C97}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SagaOrchestration", "SagaOrchestration", "{9E73820E-537A-43C3-BE23-E85458E10C97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orchestratorService", "saga-orchestration\orchestratorService\orchestratorService.csproj", "{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orchestratorService", "SagaOrchestration\orchestratorService\orchestratorService.csproj", "{B6B25C04-F38B-4EDD-BE2B-258A8CB63319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orderService", "saga-orchestration\orderService\orderService.csproj", "{02853195-EE46-437F-B5AA-E86386BCA4BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orderService", "SagaOrchestration\orderService\orderService.csproj", "{02853195-EE46-437F-B5AA-E86386BCA4BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "paymentService", "saga-orchestration\paymentService\paymentService.csproj", "{4DA4FF36-D122-486F-9B3E-A19E8760BF3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "paymentService", "SagaOrchestration\paymentService\paymentService.csproj", "{4DA4FF36-D122-486F-9B3E-A19E8760BF3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orchestratorService.lib", "saga-orchestration\orchestratorService.lib\orchestratorService.lib.csproj", "{17B60DC7-E8BE-4DCF-BAF7-57751251F08F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orchestratorService.lib", "SagaOrchestration\orchestratorService.lib\orchestratorService.lib.csproj", "{17B60DC7-E8BE-4DCF-BAF7-57751251F08F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TransactionalOutbox", "TransactionalOutbox", "{F07C448B-5963-44A9-8848-7DBA06763145}"
 EndProject

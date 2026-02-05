@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using orchestratorService.lib;
+using orchestratorService.lib.Extensions;
+using orchestratorService.lib.Implementation;
+using orchestratorService.lib.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,26 +12,13 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.WriteIndented = true;
     options.SerializerOptions.IncludeFields = true;
 });
+
 builder.Services.AddSingleton<IOrchestratorClient, OrchestratorClient>();
+builder.Services.AddSingleton<IServiceInfoResolver, ServiceInfoResolver>();
 
 var app = builder.Build();
 
-var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
-
-var orchestratorClient = app.Services.GetRequiredService<IOrchestratorClient>();
-
-lifetime.ApplicationStarted.Register(async () =>
-{
-    await orchestratorClient.Subscribe("payment-completed", "orderService");
-    await orchestratorClient.Subscribe("payment-failed", "orderService");
-});
-
-lifetime.ApplicationStopped.Register(async () =>
-{
-    await orchestratorClient.Unsubscribe("payment-completed", "orderService");
-    await orchestratorClient.Unsubscribe("payment-failed", "orderService");
-});
-
+app.RegisterLifetimeEvents();
 
 // Configure the HTTP request pipeline.
 
@@ -49,6 +38,15 @@ app.MapGet("/cancel/{id}", async ([FromRoute] string id, [FromServices] IOrchest
     await orchestratorClient.Publish("order-cancelled");
 
     return Results.Accepted();
+});
+
+app.MapGet("/subscription/{eventName}", async (
+    [FromRoute] string eventName,
+    [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+{
+    Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+
+    return Results.Ok();
 });
 
 await app.RunAsync();

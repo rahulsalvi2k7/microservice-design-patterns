@@ -1,6 +1,6 @@
-﻿namespace orchestratorService.lib
+﻿namespace orchestratorService.lib.Interfaces
 {
-    public interface IOrchestratorClient 
+    public interface IOrchestratorClient
     {
         Task Subscribe(string eventName, string serviceName);
 

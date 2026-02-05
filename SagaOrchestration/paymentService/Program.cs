@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using orchestratorService.lib;
+using orchestratorService.lib.Extensions;
+using orchestratorService.lib.Implementation;
+using orchestratorService.lib.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,24 +13,11 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.IncludeFields = true;
 });
 builder.Services.AddSingleton<IOrchestratorClient, OrchestratorClient>();
+builder.Services.AddSingleton<IServiceInfoResolver, ServiceInfoResolver>();
 
 var app = builder.Build();
 
-var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
-
-var orchestratorClient = app.Services.GetRequiredService<IOrchestratorClient>();
-
-lifetime.ApplicationStarted.Register(async () =>
-{
-    await orchestratorClient.Subscribe("order-placed", "paymentService");
-    await orchestratorClient.Subscribe("order-cancelled", "paymentService");
-});
-
-lifetime.ApplicationStopped.Register(async () =>
-{
-    await orchestratorClient.Unsubscribe("order-placed", "paymentService");
-    await orchestratorClient.Unsubscribe("order-cancelled", "paymentService");
-});
+app.RegisterLifetimeEvents();
 
 app.MapGet("/complete/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
 {
@@ -46,6 +35,15 @@ app.MapGet("/fail/{id}", async ([FromRoute] string id, [FromServices] IOrchestra
     await orchestratorClient.Publish("payment-failed");
 
     return Results.Accepted();
+});
+
+app.MapGet("/subscription/{eventName}", async (
+    [FromRoute] string eventName,
+    [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+{
+    Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+    
+    return Results.Ok();
 });
 
 await app.RunAsync();

@@ -1,4 +1,6 @@
-﻿namespace LoggerSidecar.Lib
+﻿using System.Runtime.InteropServices;
+
+namespace LoggerSidecar.Lib
 {
     public class CustomLogger : ICustomLogger
     {
@@ -29,6 +31,19 @@
                 Message = message,
                 DateTime = DateTime.UtcNow,
                 LogLevel = LogLevel.Info,
+                ServiceName = serviceName
+            });
+
+            return Task.CompletedTask;
+        }
+
+        public Task Warn(string serviceName, string message)
+        {
+            logMessageStore.LogMessages.Enqueue(new LogMessage()
+            {
+                Message = message,
+                DateTime = DateTime.UtcNow,
+                LogLevel = LogLevel.Warn,
                 ServiceName = serviceName
             });
 

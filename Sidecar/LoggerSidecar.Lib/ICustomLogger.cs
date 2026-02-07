@@ -5,5 +5,7 @@
         Task Info(string serviceName, string message);
 
         Task Error(string serviceName, string message);
+
+        Task Warn(string serviceName, string message);
     }
 }

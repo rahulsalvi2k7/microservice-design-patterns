@@ -1,56 +1,61 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using orchestratorService.lib.Interfaces;
 
-public static class EndpointRouteBuilderExtensions
+namespace paymentService
 {
-    public static IEndpointRouteBuilder RegisterPaymentRoutes(this IEndpointRouteBuilder app)
+    public static class EndpointRouteBuilderExtensions
     {
-        app.AddCompleteRoute()
-            .AddFailRoute()
-            .AddSubscriptionRoute();
-
-        return app;
-    }
-
-    private static IEndpointRouteBuilder AddCompleteRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/complete/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+        public static IEndpointRouteBuilder RegisterPaymentRoutes(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"payment completed {id}");
+            app.AddCompleteRoute()
+                .AddFailRoute()
+                .AddSubscriptionRoute();
 
-            await orchestratorClient.Publish("payment-completed");
+            return app;
+        }
 
-            return Results.Accepted();
-        });
-
-        return app;
-    }
-
-    private static IEndpointRouteBuilder AddFailRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/fail/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+        private static IEndpointRouteBuilder AddCompleteRoute(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"payment failed {id}");
+            app.MapGet("/pay/{orderId}", async ([FromRoute] string orderId) =>
+            {
+                if (orderId.Contains("failed")) 
+                {
+                    return Results.BadRequest();
+                }
 
-            await orchestratorClient.Publish("payment-failed");
+                return Results.Accepted();
+            });
 
-            return Results.Accepted();
-        });
+            return app;
+        }
 
-        return app;
-    }
-
-    private static IEndpointRouteBuilder AddSubscriptionRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/subscription/{eventName}", async (
-            [FromRoute] string eventName,
-            [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+        private static IEndpointRouteBuilder AddFailRoute(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+            app.MapGet("/fail/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+            {
+                Console.WriteLine($"payment failed {id}");
 
-            return await Task.FromResult(Results.Ok());
-        });
+                await orchestratorClient.Publish("payment-failed", JObject.FromObject(new { paymentId = id }));
 
-        return app;
+                return Results.Accepted();
+            });
+
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddSubscriptionRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/subscription/{eventName}", async (
+                [FromRoute] string eventName,
+                [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+            {
+                Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+
+                return await Task.FromResult(Results.Ok());
+            });
+
+            return app;
+        }
     }
 }

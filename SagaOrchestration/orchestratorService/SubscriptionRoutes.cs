@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace orchestratorService
 {
@@ -60,20 +61,48 @@ namespace orchestratorService
 
         private static IEndpointRouteBuilder AddPublishRoute(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/publish/{eventName}", (
-                [FromServices] Subscriptions subscriptions,
-                [FromRoute] string eventName) =>
+            app.MapPost("/publish/{eventName}", async (
+                [FromServices] ChannelProvider channelProvider,
+                [FromRoute] string eventName,
+                HttpRequest request) =>
             {
-                var subscriptionsForEvent = subscriptions
-                    .subscriptions
-                    .Where(s => s.EventName == eventName);
+                #region valiadte request body
 
-                Parallel.ForEach(subscriptionsForEvent, (subscription) =>
+                request.EnableBuffering();
+
+                using var reader = new StreamReader(request.Body);
+                var body = await reader.ReadToEndAsync();
+                request.Body.Position = 0;
+
+                if (string.IsNullOrWhiteSpace(body)) 
                 {
-                    Console.WriteLine($"{subscription.EventName} sent to {subscription.ServiceName}");
-                });
+                    return Results.BadRequest(new { error = "Missing JSON body" });
+                }
 
-                return Results.Ok();
+                #endregion valiadte request body
+
+                Console.WriteLine($"{DateTime.UtcNow:s} => event received {eventName}");
+
+                try
+                {
+                    if (eventName.Equals("order-placed"))
+                    {
+                        var data = JObject.Parse(body);
+
+                        var sagaRequest = new OrderSagaRequest(
+                            sagaId: Guid.NewGuid(),
+                            orderId: (string)data["orderId"]);
+
+                        await channelProvider.ChannelWriter.WriteAsync(sagaRequest);
+                    }
+
+                    return Results.Ok();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = "Invalid JSON", details = ex.Message });
+                }
+                
             });
 
             return app;

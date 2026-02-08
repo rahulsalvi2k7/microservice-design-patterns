@@ -1,14 +1,18 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using orchestratorService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson();
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<Subscriptions>();
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.WriteIndented = true;
-    options.SerializerOptions.IncludeFields = true;
-});
+builder.Services.AddTransient<OrderSaga>();
+builder.Services.AddSingleton<ChannelProvider>();
+builder.Services.AddHostedService<SagaService>();
 
 var app = builder.Build();
 

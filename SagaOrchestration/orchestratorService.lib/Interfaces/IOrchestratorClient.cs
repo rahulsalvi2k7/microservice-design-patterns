@@ -1,4 +1,6 @@
-﻿namespace orchestratorService.lib.Interfaces
+﻿using Newtonsoft.Json.Linq;
+
+namespace orchestratorService.lib.Interfaces
 {
     public interface IOrchestratorClient
     {
@@ -6,6 +8,6 @@
 
         Task Unsubscribe(string eventName, string serviceName);
 
-        Task Publish(string eventName);
+        Task Publish(string eventName, JObject data);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using orchestratorService.lib.Interfaces;
+using System.Text;
 
 namespace orchestratorService.lib.Implementation
 {
@@ -19,9 +21,11 @@ namespace orchestratorService.lib.Implementation
             _httpClient.BaseAddress = new Uri(orchestratorBaseAddress);
         }
 
-        public async Task Publish(string eventName)
+        public async Task Publish(string eventName, JObject data)
         {
-            var response = await _httpClient.GetAsync($"/publish/{eventName}");
+            var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"/publish/{eventName}", content);
 
             response.EnsureSuccessStatusCode();
         }

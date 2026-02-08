@@ -1,56 +1,75 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using orchestratorService.lib.Interfaces;
 
-public static class EndpointRouteBuilderExtensions
+namespace orderService
 {
-    public static IEndpointRouteBuilder RegisterOrderRoutes(this IEndpointRouteBuilder app)
+    public static class EndpointRouteBuilderExtensions
     {
-        app.AddPlaceOrderRoute()
-            .AddCancelOrderRoute()
-            .AddSubscriptionRoute();
-
-        return app;
-    }
-
-    private static IEndpointRouteBuilder AddPlaceOrderRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/place/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+        public static IEndpointRouteBuilder RegisterOrderRoutes(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"order placed {id}");
+            app.AddPlaceOrderRoute()
+                .AddCompleteOrderRoute()
+                .AddCancelOrderRoute()
+                .AddSubscriptionRoute();
 
-            await orchestratorClient.Publish("order-placed");
+            return app;
+        }
 
-            return Results.Accepted();
-        });
-
-        return app;
-    }
-
-    private static IEndpointRouteBuilder AddCancelOrderRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/cancel/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+        private static IEndpointRouteBuilder AddPlaceOrderRoute(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"order cancelled {id}");
+            app.MapGet("/place/{id}/{amount}", async ([FromRoute] string id, [FromRoute] int amount, [FromServices] IOrchestratorClient orchestratorClient) =>
+            {
+                Console.WriteLine($"{DateTime.UtcNow:s} => order placed {id} {amount}");
 
-            await orchestratorClient.Publish("order-cancelled");
+                await orchestratorClient.Publish("order-placed", JObject.FromObject(new { orderId = id, amount }));
 
-            return Results.Accepted();
-        });
+                return Results.Accepted();
+            });
 
-        return app;
-    }
+            return app;
+        }
 
-    private static IEndpointRouteBuilder AddSubscriptionRoute(this IEndpointRouteBuilder app)
-    {
-        app.MapGet("/subscription/{eventName}", async (
-            [FromRoute] string eventName,
-            [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+        private static IEndpointRouteBuilder AddCompleteOrderRoute(this IEndpointRouteBuilder app)
         {
-            Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+            app.MapGet("/complete/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+            {
+                Console.WriteLine($"{DateTime.UtcNow:s} => order completed {id}");
 
-            return Results.Ok();
-        });
+                await orchestratorClient.Publish("order-completed", JObject.FromObject(new { orderId = id }));
 
-        return app;
+                return Results.Accepted();
+            });
+
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddCancelOrderRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/cancel/{id}", async ([FromRoute] string id, [FromServices] IOrchestratorClient orchestratorClient) =>
+            {
+                Console.WriteLine($"{DateTime.UtcNow:s} => order cancelled {id}");
+
+                await orchestratorClient.Publish("order-cancelled", JObject.FromObject(new { orderId = id }));
+
+                return Results.Accepted();
+            });
+
+            return app;
+        }
+
+        private static IEndpointRouteBuilder AddSubscriptionRoute(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/subscription/{eventName}", async (
+                [FromRoute] string eventName,
+                [FromServices] IServiceInfoResolver serviceInfoResolver) =>
+            {
+                Console.WriteLine($"{serviceInfoResolver.GetServiceName()} reacting to event {eventName}");
+
+                return Results.Ok();
+            });
+
+            return app;
+        }
     }
 }

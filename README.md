@@ -1,5 +1,101 @@
 # Microservice Design Patterns
 
+A compact collection of .NET sample projects demonstrating common microservice design patterns: aggregation, circuit breaker, distributed tracing, rate limiting, saga orchestration, service discovery, sidecar, and transactional outbox.
+
+> [!note]
+> These samples target .NET 8.0. Use the `dotnet` CLI to run each sample project.
+
+## Quickstart
+
+Prerequisites:
+
+- Install the .NET 8 SDK: https://dotnet.microsoft.com/
+- A terminal (PowerShell on Windows is used in examples below)
+
+To run a sample, open a terminal and `cd` to the sample folder, then run:
+
+```powershell
+cd <sample-folder>
+dotnet run
+```
+
+Example — run the Saga orchestration orchestrator:
+
+```powershell
+cd SagaOrchestration/orchestratorService
+dotnet run
+```
+
+## Projects (overview)
+
+- **Aggregator/** — Example of an API aggregator that composes responses from `OrderHeader` and `OrderItems` services.
+- **CircuitBreaker/** — Sample services and a switch demonstrating circuit-breaker and fallback behaviors.
+- **DistributedTracing/** — Minimal services instrumented for distributed tracing and centralized logging.
+- **RateLimiter/** — Tenant-aware rate limiting middleware and a small rate-limiter service.
+- **SagaOrchestration/** — Orchestrator pattern example with `orchestratorService`, `orderService`, and `paymentService` (see below).
+- **ServiceDiscovery/** — Examples showing simple service registry and services that register/discover.
+- **Sidecar/** — Demonstrates a sidecar pattern with central logging and example services.
+- **TransactionalOutbox/** — Example showing the transactional outbox pattern to reliably publish events.
+
+See the solution file [DesignPatterns.sln](DesignPatterns.sln) for the full set of projects.
+
+## SagaOrchestration example
+
+This folder contains a small orchestrator + service pair that demonstrates a basic saga flow:
+
+- `SagaOrchestration/orchestratorService` — the orchestrator that coordinates the order saga.
+- `SagaOrchestration/orderService` — service that handles order commands.
+- `SagaOrchestration/paymentService` — service that handles payments.
+
+Run them in separate terminals (order matters only if you want the orchestrator to call an already-running service):
+
+```powershell
+# Terminal 1
+cd SagaOrchestration/orderService
+dotnet run
+
+# Terminal 2
+cd SagaOrchestration/paymentService
+dotnet run
+
+# Terminal 3
+cd SagaOrchestration/orchestratorService
+dotnet run
+```
+
+The orchestrator exposes endpoints described in `orchestratorService.http` for local testing using HTTP clients or the .http files in each project.
+
+## Running other samples
+
+Each sample folder contains a `.http` file and `Program.cs` with minimal configuration. Typical steps:
+
+```powershell
+cd Aggregator/OrderAggregator
+dotnet run
+```
+
+If a sample depends on multiple projects, start each required service in its own terminal.
+
+## Development notes
+
+- Configuration is provided via `appsettings.json` and `appsettings.Development.json` in each project.
+- Most projects use minimal APIs and can be inspected/modified quickly; use `dotnet build` to verify compilation.
+- The `.http` files included in many folders are convenient for VS Code REST client or JetBrains HTTP client testing.
+
+## Tests & automation
+
+Some folders include test projects (e.g., under `Sidecar`). Use the `dotnet test` command inside the test project folder.
+
+## What's next
+
+- Run a sample you care about and open any `.http` file in an editor to exercise endpoints.
+- If you want, I can add step-by-step walkthroughs for a specific pattern (e.g., Saga or Circuit Breaker).
+
+---
+
+README created to document the collection of microservice pattern samples. For details about a specific project, open its folder and review `Program.cs` and the included `.http` test files.
+# Microservice Design Patterns
+
 [![Build Status](https://img.shields.io/badge/Built%20with-.NET%208-512bd4?style=flat-square)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 ![C#](https://img.shields.io/badge/C%23-latest-239120?style=flat-square&logo=csharp&logoColor=white)

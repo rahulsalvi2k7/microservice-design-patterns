@@ -1,16 +1,19 @@
 // Configure the HTTP request pipeline.
 
 
+using OrderService.Models;
+
 public class OutboxProcessingService : BackgroundService
 {
-    private readonly OrderOutbox orderOutbox;
-    private readonly HttpClient httpClient;
+    private readonly Outbox orderOutbox;
+    private readonly HttpClient notificationHttpClient;
 
-    public OutboxProcessingService(OrderOutbox orderOutbox, IHttpClientFactory httpClientFactory)
+    public OutboxProcessingService(Outbox orderOutbox, IHttpClientFactory httpClientFactory)
     {
         this.orderOutbox = orderOutbox;
-        this.httpClient = httpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri("http://localhost:5153");
+        this.notificationHttpClient = httpClientFactory.CreateClient();
+
+        notificationHttpClient.BaseAddress = new Uri("http://localhost:5153");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,9 +47,9 @@ public class OutboxProcessingService : BackgroundService
         }
     }
 
-    private async Task SendNotificaiton(OrderOutboxMessage waitingMessage, CancellationToken cancellationToken)
+    private async Task SendNotificaiton(OutboxMessage waitingMessage, CancellationToken cancellationToken)
     {
-        var response = await httpClient.GetAsync($"/notify/{waitingMessage.Id}", cancellationToken);
+        var response = await notificationHttpClient.GetAsync($"/notify/{waitingMessage.Id}", cancellationToken);
 
         response.EnsureSuccessStatusCode();
     }

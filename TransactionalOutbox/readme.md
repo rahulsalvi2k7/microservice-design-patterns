@@ -50,15 +50,15 @@ A lightweight service that:
 
 ```
 ┌─────────────┐
-│  Orderervice │
-│ ┌─────────┐  │
-│ │ Outbox  │  └─── Pending Messages ───┐
-│ └─────────┘  │                         │
-└─────────────┘                         │
-     │                                   │
-     │ (Background Service polls)        │
-     │                                   ▼
-     └──────────────────────────────┐
+│  Orderervice│
+│ ┌─────────┐ │
+│ │ Outbox  │ └─── Pending Messages ───┐
+│ └─────────┘ │                        │
+└─────────────┘                        │
+     │                                 │
+     │ (Background Service polls)      │
+     │                                 │
+     └─────────────────────────────┐───┘
                                    │
                     ┌──────────────▼─────────────┐
                     │ OutboxProcessingService    │
@@ -66,10 +66,10 @@ A lightweight service that:
                     └──────────────┬─────────────┘
                                    │
                                    ▼
-                    ┌──────────────────────────┐
-                    │ NotificationService      │
-                    │ (Sends Notification)     │
-                    └──────────────────────────┘
+                    ┌────────────────────────────┐
+                    │ NotificationService        │
+                    │ (Sends Notification)       │
+                    └────────────────────────────┘
 ```
 
 ## Getting Started

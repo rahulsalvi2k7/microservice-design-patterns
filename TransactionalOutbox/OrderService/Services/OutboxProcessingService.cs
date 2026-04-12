@@ -1,16 +1,22 @@
-// Configure the HTTP request pipeline.
-
-
 using OrderService.Models;
+using OrderService.Services;
 
 public class OutboxProcessingService : BackgroundService
 {
     private readonly Outbox orderOutbox;
+    private readonly SemaphoreSlimProvider semaphoreSlimProvider;
     private readonly HttpClient notificationHttpClient;
 
-    public OutboxProcessingService(Outbox orderOutbox, IHttpClientFactory httpClientFactory)
+    private static readonly int PollingIntervalInMilliseconds = 5_000;
+    private static readonly int NotificationIntervalInMilliseconds = 1_000;
+
+    public OutboxProcessingService(
+        Outbox orderOutbox,
+        IHttpClientFactory httpClientFactory,
+        SemaphoreSlimProvider semaphoreSlimProvider)
     {
         this.orderOutbox = orderOutbox;
+        this.semaphoreSlimProvider = semaphoreSlimProvider;
         this.notificationHttpClient = httpClientFactory.CreateClient();
 
         notificationHttpClient.BaseAddress = new Uri("http://localhost:5153");
@@ -20,14 +26,18 @@ public class OutboxProcessingService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
+            await semaphoreSlimProvider.WaitAsync(stoppingToken);
+
             var waitingMessage = orderOutbox.Messages.FirstOrDefault(m => m.MessageStatus == MessageStatus.Waiting);
 
             if (waitingMessage is null)
             {
-                Console.WriteLine($"no messages waiting...wait for 10s");
+                // No messages so release the lock and wait for 5sec before checking again                    
+                semaphoreSlimProvider.Release();
+                Console.WriteLine($"no messages waiting...wait for 5s");
 
-                // Check every 10 sec
-                await Task.Delay(10_000, stoppingToken);
+                // Check every 5 sec
+                await Task.Delay(PollingIntervalInMilliseconds, stoppingToken);
 
                 continue;
             }
@@ -44,6 +54,12 @@ public class OutboxProcessingService : BackgroundService
 
                 waitingMessage.MessageStatus = MessageStatus.Failed;
             }
+            finally
+            {
+                semaphoreSlimProvider.Release();
+            }
+
+            await Task.Delay(NotificationIntervalInMilliseconds, stoppingToken);
         }
     }
 

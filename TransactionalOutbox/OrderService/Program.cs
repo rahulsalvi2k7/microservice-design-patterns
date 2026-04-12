@@ -1,11 +1,13 @@
 using OrderService.Extensions;
 using OrderService.Models;
+using OrderService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<Outbox>();
+builder.Services.AddSingleton<SemaphoreSlimProvider>();
 builder.Services.AddHostedService<OutboxProcessingService>();
 
 var app = builder.Build();

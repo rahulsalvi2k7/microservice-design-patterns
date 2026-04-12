@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Models;
+using OrderService.Services;
 
 namespace OrderService.Extensions
 {
@@ -14,15 +15,26 @@ namespace OrderService.Extensions
 
         private static IEndpointRouteBuilder RegisterCreateRoute(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/create/{id}", (
+            app.MapGet("/create/{id}", async (
                 [FromRoute] string id,
-                [FromServices] Outbox orderOutbox) =>
+                [FromServices] Outbox orderOutbox,
+                [FromServices] SemaphoreSlimProvider semaphoreSlimProvider,
+                CancellationToken cancellationToken) =>
             {
-                orderOutbox.Messages.Add(new OutboxMessage(id, MessageStatus.Waiting));
+                await semaphoreSlimProvider.WaitAsync(cancellationToken);
 
-                Console.WriteLine($"Order {id} created");
+                try
+                {
+                    orderOutbox.Messages.Add(new OutboxMessage(id, MessageStatus.Waiting));
 
-                return Results.Accepted();
+                    Console.WriteLine($"Order {id} created");
+
+                    return Results.Accepted();
+                }
+                finally
+                {
+                    semaphoreSlimProvider.Release();
+                }
             });
 
             return app;

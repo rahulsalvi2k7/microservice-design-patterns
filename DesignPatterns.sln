@@ -69,6 +69,35 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "Distributed
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "DistributedTracing\PaymentService\PaymentService.csproj", "{74C6ADD3-8951-4DA5-8494-CA074776C2A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainEvents.Lib", "EventSourcing\DomainEvent.Lib\DomainEvents.Lib.csproj", "{680A4302-716E-A05A-716A-D60CF7F1391C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventSourcing", "EventSourcing", "{044BCA2B-D023-4D82-9EF2-B4635ED35FCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.api", "EventSourcing\Domain.api\Domain.api.csproj", "{07243919-DA80-4855-A40D-5E211AC57DDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{FE2C03FB-3AFA-4EED-B1C8-E4804F4590B2}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Domain.Client", "EventSourcing\Domain.Client\", "{8720B81C-DC29-835A-0296-C378591DA9F5}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_50944"
+		Debug.AspNetCompiler.PhysicalPath = "EventSourcing\Domain.Client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50944\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_50944"
+		Release.AspNetCompiler.PhysicalPath = "EventSourcing\Domain.Client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50944\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "50944"
+		SlnRelativePath = "EventSourcing\Domain.Client\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +204,18 @@ Global
 		{74C6ADD3-8951-4DA5-8494-CA074776C2A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74C6ADD3-8951-4DA5-8494-CA074776C2A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74C6ADD3-8951-4DA5-8494-CA074776C2A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{680A4302-716E-A05A-716A-D60CF7F1391C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{680A4302-716E-A05A-716A-D60CF7F1391C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{680A4302-716E-A05A-716A-D60CF7F1391C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{680A4302-716E-A05A-716A-D60CF7F1391C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07243919-DA80-4855-A40D-5E211AC57DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07243919-DA80-4855-A40D-5E211AC57DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07243919-DA80-4855-A40D-5E211AC57DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07243919-DA80-4855-A40D-5E211AC57DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8720B81C-DC29-835A-0296-C378591DA9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8720B81C-DC29-835A-0296-C378591DA9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8720B81C-DC29-835A-0296-C378591DA9F5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8720B81C-DC29-835A-0296-C378591DA9F5}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,6 +246,10 @@ Global
 		{01DE33AA-678E-4949-8741-FB3C1256F995} = {72065CF6-B4DE-4E45-9981-039C7156ED1B}
 		{5618C798-6850-4060-A2AD-1B12D4FD196D} = {72065CF6-B4DE-4E45-9981-039C7156ED1B}
 		{74C6ADD3-8951-4DA5-8494-CA074776C2A5} = {72065CF6-B4DE-4E45-9981-039C7156ED1B}
+		{680A4302-716E-A05A-716A-D60CF7F1391C} = {044BCA2B-D023-4D82-9EF2-B4635ED35FCB}
+		{07243919-DA80-4855-A40D-5E211AC57DDF} = {044BCA2B-D023-4D82-9EF2-B4635ED35FCB}
+		{FE2C03FB-3AFA-4EED-B1C8-E4804F4590B2} = {044BCA2B-D023-4D82-9EF2-B4635ED35FCB}
+		{8720B81C-DC29-835A-0296-C378591DA9F5} = {FE2C03FB-3AFA-4EED-B1C8-E4804F4590B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1282EA9-7AC8-4921-AA28-3F4DBCC5E559}

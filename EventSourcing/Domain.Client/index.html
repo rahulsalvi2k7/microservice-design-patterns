@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Response Viewer</title>
+    <link rel="stylesheet" href="./w3.css" />
+    <script>
+
+        const streamUrl = 'http://localhost:5135/replay/1';
+
+        async function streamResponse(url) {
+
+            const responseContent = document.getElementById('responseContent');
+
+            const response = await fetch(url);
+
+            const reader = response.body.getReader();
+            
+            while (true) {
+
+                const { done, value } = await reader.read();
+
+                if (done) {
+                    break;
+                }
+
+                responseContent.innerHTML += parseData(value);
+            }
+        }
+
+        function parseData(value) {            
+
+            let val = new TextDecoder().decode(value).replace('[', '').replace(']', '');
+
+            if (val.indexOf(',') <= 0) {
+
+                val = val.substring(1, val.length);
+            }
+
+            let data = JSON.parse(val);
+
+            return `<li class="w3-bar">${data.name} at ${data.createdAt.toLocaleString()}</li>`;
+        }
+
+        window.onload = function () {
+            streamResponse(streamUrl);
+        };
+    </script>
+</head>
+<body>
+    <div class="w3-container" style="margin-top:16px">
+        <ul class="w3-ul w3-card-4" id="responseContent">
+        </ul>
+    </div>
+</body>
+</html>

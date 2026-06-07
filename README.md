@@ -1,6 +1,6 @@
 # Microservice Design Patterns
 
-A compact collection of .NET sample projects demonstrating common microservice design patterns: aggregation, circuit breaker, distributed tracing, rate limiting, saga orchestration, service discovery, sidecar, and transactional outbox.
+A compact collection of .NET sample projects demonstrating common microservice design patterns: aggregation, circuit breaker, distributed tracing, event sourcing, rate limiting, saga orchestration, service discovery, sidecar, and transactional outbox.
 
 > [!note]
 > These samples target .NET 8.0. Use the `dotnet` CLI to run each sample project.
@@ -31,6 +31,7 @@ dotnet run
 - **Aggregator/** — Example of an API aggregator that composes responses from `OrderHeader` and `OrderItems` services.
 - **CircuitBreaker/** — Sample services and a switch demonstrating circuit-breaker and fallback behaviors.
 - **DistributedTracing/** — Minimal services instrumented for distributed tracing and centralized logging.
+- **EventSourcing/** — Event-sourcing sample with a small domain API, event store library, and a simple client UI.
 - **RateLimiter/** — Tenant-aware rate limiting middleware and a small rate-limiter service.
 - **SagaOrchestration/** — Orchestrator pattern example with `orchestratorService`, `orderService`, and `paymentService` (see below).
 - **ServiceDiscovery/** — Examples showing simple service registry and services that register/discover.
@@ -64,6 +65,23 @@ dotnet run
 ```
 
 The orchestrator exposes endpoints described in `orchestratorService.http` for local testing using HTTP clients or the .http files in each project.
+
+## EventSourcing example
+
+This folder contains a small event-sourcing sample that stores order domain events in memory and replays them to rebuild the current state:
+
+- `EventSourcing/Domain.api` — minimal API that creates, ships, and receives orders and exposes hydrate/replay endpoints.
+- `EventSourcing/DomainEvent.Lib` — shared event and in-memory event-store implementation.
+- `EventSourcing/Domain.Client` — simple client UI for exploring the sample.
+
+Run the API from the repository root:
+
+```powershell
+cd EventSourcing/Domain.api
+dotnet run
+```
+
+Then open the `Domain.Client/index.html` page in a browser or use the `.http` file in `Domain.api` to exercise the endpoints.
 
 ## Running other samples
 
@@ -169,7 +187,13 @@ Deploys auxiliary logic in a separate process alongside the main application ser
 - **Use Case**: Adding observability, configuration, or communication logic
 - **Services**: CentralLoggingService, ServiceA, ServiceB
 
-### 8. **Transactional Outbox** 📮
+### 8. **Event Sourcing** 🧾
+Records domain state changes as immutable events and replays them to reconstruct current state. This sample demonstrates event creation, hydration, and replay using an in-memory event store.
+
+- **Use Case**: Auditing, debugging, and rebuilding aggregate state from history
+- **Services**: Domain.api, DomainEvent.Lib, Domain.Client
+
+### 9. **Transactional Outbox** 📮
 Ensures reliable message publishing by storing messages in a database transaction alongside business data, then publishing them asynchronously.
 
 - **Use Case**: Maintaining consistency between database state and external message systems
@@ -299,6 +323,10 @@ microservice-design-patterns/
 ├── DistributedTracing/      # Distributed Tracing pattern implementation
 │   ├── OrderService/
 │   └── PaymentService/
+├── EventSourcing/            # Event Sourcing pattern implementation
+│   ├── Domain.api/
+│   ├── Domain.Client/
+│   └── DomainEvent.Lib/
 ├── RateLimiter/             # Rate Limiter pattern implementation
 │   └── RateLimiterService/
 ├── SagaOrchestration/       # Saga Orchestration pattern implementation
